@@ -193,11 +193,88 @@ select * from instructor i
  );
 
 
+-- BÀI 5
+-- 1. INDEX
+select count(*) from customers;
+select * from customers;
 
- 
- 
- 
- 
- 
+
+explain select * from customers where city ='lyon';
+explain select * from customers where country ='france';
+
+create index i_country on customers(country);
+
+alter table customers add index i_country(country);
+
+drop index i_country on customers;
+
+alter table customers drop index i_country;
+
+-- 2. VIEW
+create view w_student as
+select s.*, c.name as class_name from student  s
+ join class  c on s.class_id = c.id;
+
+select * from w_student;
+select * from w_student;
+-- khi bảng chính thay đổi thì view có thay đổi hay không và ngược lại
+update w_student set name ='abc' where id =1;
+
+create view w_student1 as
+select s.*, c.name as class_name , j.username  from student  s
+ join class  c on s.class_id = c.id
+ join jame j on s.username = j.username;
+
+-- 3. SP
+-- lấy tất cả thông tin của học viên -- không tham số
+   delimiter //
+   create procedure get_all_student()
+   begin
+    
+    select * from student;
+    select * from student;
+    select * from student;
+   end //
+   delimiter ;
+
+call get_all_student();
+
+-- xoa sinh viên theo id 
+delimiter $$
+create procedure delete_student_by_id(IN p_id int)
+begin
+delete from student where id = p_id;
+end $$
+delimiter ;
+
+call delete_student_by_id(1);
+-- 4. FUNCTION
+select * from student;
+-- viết function xếp loại
+
+delimiter //
+create function xep_loai (p_point int)
+returns varchar(20)
+deterministic
+begin 
+declare loai varchar(20);
+if p_point >=8 then
+set loai = 'gioi';
+elseif p_point>=7 then
+set loai = 'khá';
+elseif p_point>=5 then
+set loai = ' trung bình';
+else
+set loai ='yeu';
+end if;
+return loai;
+end //
+delimiter ;
+
+select *, xep_loai(point) as `rank` from student;
+
+
+
+
  
  
