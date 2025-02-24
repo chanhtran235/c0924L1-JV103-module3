@@ -12,7 +12,7 @@ create table room (
  id int primary key auto_increment,
  `name` varchar(50),
  class_id int,
- foreign key(class_id) references class(id)
+ foreign key(class_id) references class(id) on delete set null
 );
 create table student(
  id int primary key auto_increment,
@@ -23,8 +23,8 @@ create table student(
  point float,
  `username` varchar(50) unique,
  class_id int,
- foreign key (`username`) references jame(`username`),
- foreign key (class_id) references class(id)
+ foreign key (`username`) references jame(`username`) on delete cascade,
+ foreign key (class_id) references class(id)  on delete set null
  );
  
 create table instructor (
@@ -40,7 +40,7 @@ create table instructor (
   end_time date,
   primary key (instructor_id,class_id),
   foreign key (instructor_id) references instructor(id),
-  foreign key (class_id) references class(id)
+  foreign key (class_id) references class(id) on delete cascade
  );
  
  -- input data
@@ -271,7 +271,41 @@ return loai;
 end //
 delimiter ;
 
-select *, xep_loai(point) as `rank` from student;
+SELECT 
+    *, XEP_LOAI(point) AS `rank`
+FROM
+    student;
+-- 5 tạo trigger tự động lưu lại lịch sử thay đổi điểm của sinh viên
+
+ select * from student;
+ select * from jame;
+
+-- tạo bảng để ghi log
+CREATE TABLE `history` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    old_point INT,
+    new_point INT,
+    update_day DATE
+);
+select * from history;
+ select * from student;
+
+-- tạo trigger
+DELIMITER //
+CREATE TRIGGER tr_history 
+AFTER UPDATE ON student
+FOR EACH ROW
+BEGIN
+insert into `history`(`name`, old_point, new_point, update_day) 
+values ( old.`name`, old.`point`,new.`point`,now());
+END //
+DELIMITER ;
+
+select * from history;
+select * from student;
+
+delete from history where name ='le hai chung';
 
 
 
