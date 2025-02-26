@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh; /* Chiều cao toàn màn hình */
+        }
+
+        .header {
+            height: 10%;
+            background-color: antiquewhite;
+        }
+
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            height: 80%; /* Chiều cao phần content */
+            background-color: lightgray;
+        }
+
+        .left, .main, .right {
+            flex-grow: 1;
+        }
+
+        .left {
+            background-color: orange;
+        }
+
+        .main {
+            background-color: gray;
+            flex-grow: 4; /* Cột chính lớn hơn */
+        }
+
+        .right {
+            background-color: bisque;
+        }
+
+        .footer {
+            height: 10%;
+            background-color: gray;
+        }
+        @media screen and (max-width: 700px) {
+            .left, main {
+                width: 50%;
+            }
+            .right {
+                flex-basis: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header"></div>
+    <div class="content">
+        <div class="left"></div>
+        <div class="main"></div>
+        <div class="right"></div>
+    </div>
+    <div class="footer">FOOTER</div>
+</div>
+
+</body>
+</html>

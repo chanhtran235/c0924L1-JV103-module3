@@ -116,9 +116,50 @@ join room r on r.class_id = c.id;
    --  Câu 6. Lấy ra các học viên có điểm lớn hơn 5
    --  Câu 7. lấy ra thông tin các học viên có điểm 4,6,8
    
+   select distinct point from student;
+   
    --  Câu 8. Thông kế số lượng học sinh theo từng loại điểm.
+   select point, count(id) from student group by point;
    
    --  Câu 9 . Thông kế số lượng học sinh theo điểm và điểm phải lớn hơn 5
+    select point, count(id) from student where point >=5 group by point;
+    
     -- Câu 10. Thông kế số lượng học sinh theo điểm lớn hơn 5 và chỉ hiện thị với số lượng>=2
+    
+     select point, count(id) as so_luong from student
+     where point >=5 group by point having so_luong>=2;
+     
     -- Câu 11. Lấy ra danh sách học viên của lớp c1121g1 và sắp xếp  học viên theo point giảm dần
-
+    -- 1 câu query đầy đủ
+    
+    select * from student s 
+    join class c on s.class_id = c. id
+    where c.name ='c1121g1' 
+    order by s.point desc, s.name;
+    select * from student;
+	-- Câu 1:	Hiện thị danh sách các lớp có học viên theo học và số lượng học viên của mỗi lớp
+       select c.name as class_name, count(s.id) from student s
+	   join class c on s.class_id = c.id
+       group by c.id;
+    
+    -- Câu 2.	 Tính điểm lớn nhất của mỗi các lớp
+    -- Câu 3	 Tình điểm trung bình  của từng lớp
+    -- Câu 4 Lấy ra toàn bộ tên và ngày sinh các instructor và student ở CodeGym
+    
+    select s.name, s.point from student s
+    union all
+    select i.name, i.birthday from instructor i;
+    
+    select s.*,c.name as class_name from student  s
+    left join class  c on s.class_id = c.id 
+    union 
+	select s.*,c.name as class_name from student  s
+    right join class  c on s.class_id = c.id;
+    
+    -- Câu 5: Lấy ra top 3 học viên có điểm cao nhất của trung tâm.
+    select * from student order by point desc limit 3, 3;
+    -- Câu 6: Lấy ra các học viên có điểm số là cao nhất của trung tâm.
+    select * from student where point =( select max(point) from student);
+    select max(point) from student; 
+	-- Câu 7: lấy ra tất cả các giảng viên chưa từng tham gia giảng dạy
+    

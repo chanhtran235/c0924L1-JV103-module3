@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr; /* 3 cột: sidebar - content - rightbar */
+            grid-template-rows: 1fr 8fr 1fr; /* Header - Content - Footer */
+            gap: 1%; /* Khoảng cách giữa các ô */
+            height: 100vh; /* Chiều cao toàn màn hình */
+        }
+
+        .header {
+            grid-column: 1 / -1; /* Trải rộng toàn bộ hàng */
+            background: antiquewhite;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .sidebar {
+            background: orange;
+            padding: 20px;
+        }
+
+        .content {
+            background: gray;
+            padding: 20px;
+        }
+
+        .rightbar {
+            background: bisque;
+            padding: 20px;
+        }
+
+        .footer {
+            grid-column: 1 / 4;
+            background: lightgray;
+            text-align: center;
+            padding: 20px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="header">Header</header>
+    <aside class="sidebar">Sidebar</aside>
+    <section class="content">Main Content</section>
+    <aside class="sidebar">Side bar</aside>
+    <footer class="footer">Footer</footer>
+</div>
+
+</body>
+</html>
