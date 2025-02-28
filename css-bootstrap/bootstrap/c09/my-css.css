@@ -1,0 +1,26 @@
+/*.button {*/
+/*    background-color: #0a53be;*/
+/*}*/
+:root {
+    --main-color: #65388e;
+    --main-text: white
+}
+
+.my-nav{
+    background-color: var(--main-color) ;
+}
+.my-content{
+    margin-top: 5%;
+    height: 90%;
+}
+
+.my-nav a{
+    color: var(--main-text);
+}
+.my-sidebar{
+    border: 1px solid var(--main-color) ;
+    height: 100%;
+}
+.card {
+    margin-left: 1%;
+}
