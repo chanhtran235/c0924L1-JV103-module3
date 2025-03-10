@@ -12,13 +12,17 @@ public class StudentService implements IStudentService{
    private IStudentRepository studentRepository = new StudentRepository();
     @Override
     public List<Student> findAll() {
+        // không cần xử ly nghiệp vụ => gọi repository => lây list
         // gọi repository ( lấy dữ liệu)
         return studentRepository.findAll();
     }
 
     @Override
     public boolean add(Student student) {
+        // kiểm tra tính hợp lệ dữ liêu trước khi thêm mới vào csdl
+        // validate cho này
         studentRepository.add(student);
         return true;
+
     }
 }
