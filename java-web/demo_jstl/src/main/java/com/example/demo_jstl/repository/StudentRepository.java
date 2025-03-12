@@ -23,10 +23,32 @@ public class StudentRepository implements IStudentRepository {
     }
 
     @Override
+    public List<Student> searchByName(String name) {
+        List<Student> searchList = new ArrayList<>();
+        for (Student s : studentList) {
+            if (s.getName().contains(name)){
+                searchList.add(s);
+            }
+        }
+        return searchList;
+    }
+
+    @Override
     public boolean add(Student student) {
         // kết nối DB để thêm dữ liệu vào
 
 
         return studentList.add(student);
+    }
+
+    @Override
+    public boolean deleteById(int id) {
+        for (int i = 0; i <studentList.size() ; i++) {
+            if (studentList.get(i).getId()==id){
+                studentList.remove(i);
+                break;
+            }
+        }
+        return true;
     }
 }

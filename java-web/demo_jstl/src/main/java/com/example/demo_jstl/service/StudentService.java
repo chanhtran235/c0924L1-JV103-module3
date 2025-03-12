@@ -18,11 +18,22 @@ public class StudentService implements IStudentService{
     }
 
     @Override
+    public List<Student> searchByName(String name) {
+
+        return studentRepository.searchByName(name);
+    }
+
+    @Override
     public boolean add(Student student) {
         // kiểm tra tính hợp lệ dữ liêu trước khi thêm mới vào csdl
         // validate cho này
         studentRepository.add(student);
         return true;
 
+    }
+
+    @Override
+    public boolean deleteById(int id) {
+        return studentRepository.deleteById(id);
     }
 }

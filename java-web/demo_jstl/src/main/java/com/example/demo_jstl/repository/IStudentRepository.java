@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface IStudentRepository {
     List<Student> findAll();
+    List<Student> searchByName(String name);
     boolean add(Student student);
+    boolean deleteById(int id);
 }

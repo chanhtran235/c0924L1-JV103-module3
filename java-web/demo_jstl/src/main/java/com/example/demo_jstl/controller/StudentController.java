@@ -29,19 +29,46 @@ public class StudentController extends HttpServlet {
                showFormCreate(req,resp);
            break;
            case "delete":
+               deleteById(req,resp);
                // xoá
                break;
-           case "update":
+           case "search":
+               searchByName(req,resp);
                // update
+               break;
+           case "edit":
+               // showFormEdit()
                break;
            default:
                // trả về list
                showList(req,resp);
 
        }
-
     }
 
+    private void searchByName(HttpServletRequest req, HttpServletResponse resp) {
+        String searchName = req.getParameter("searchName");
+        List<Student> searchList = studentService.searchByName(searchName);
+        req.setAttribute("studentList", searchList);
+        req.setAttribute("searchName", searchName);
+        try {
+            req.getRequestDispatcher("/views/student/list.jsp").forward(req,resp);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void deleteById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int deleteId = Integer.parseInt(req.getParameter("deleteId"));
+        boolean isDeleteSuccess =studentService.deleteById(deleteId);
+        String mess = "Delete not success";
+        if(isDeleteSuccess){
+            mess = "Delete success";
+        }
+        resp.sendRedirect("/students?mess="+mess);
+    }
     private void showFormCreate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         req.getRequestDispatcher("/views/student/create.jsp").forward(req,resp);
@@ -71,11 +98,10 @@ public class StudentController extends HttpServlet {
             case "delete":
                 // xoá
                 break;
-            case "update":
+            case "edit":
                 // update
                 break;
             default:
-
         }
     }
     private void save(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
