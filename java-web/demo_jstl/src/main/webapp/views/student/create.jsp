@@ -41,7 +41,7 @@
 <form class="form" action="/students?action=create" method="post">
     <div>
         <h3>Thêm mới </h3>
-        <input name="id" placeholder="nhập id"><br>
+<%--        <input name="id" placeholder="nhập id"><br>--%>
         <input name="name" placeholder="nhập tên"><br>
         <input type="radio" name="gender" value="true">Nam
         <input type="radio" name="gender" value="false">Nữ<br>

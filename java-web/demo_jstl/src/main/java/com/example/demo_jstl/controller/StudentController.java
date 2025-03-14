@@ -105,12 +105,12 @@ public class StudentController extends HttpServlet {
         }
     }
     private void save(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int id = Integer.parseInt(req.getParameter("id"));
+//        int id = Integer.parseInt(req.getParameter("id"));
         String name = req.getParameter("name");
         boolean gender = Boolean.parseBoolean(req.getParameter("gender"));
         float score = Float.parseFloat(req.getParameter("score"));
         int classId = Integer.parseInt(req.getParameter("classId"));
-        Student student = new Student(id,name,gender,score,classId);
+        Student student = new Student(name,gender,score,classId);
         boolean flag = studentService.add(student);
         if (flag){
             // thêm mới thành công

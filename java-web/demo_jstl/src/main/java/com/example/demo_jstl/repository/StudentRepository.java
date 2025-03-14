@@ -1,54 +1,98 @@
 package com.example.demo_jstl.repository;
 
 import com.example.demo_jstl.model.Student;
+import com.example.demo_jstl.util.BaseRepository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudentRepository implements IStudentRepository {
-    private static List<Student> studentList = new ArrayList<>();
-    static {
-        studentList.add(new Student(1,"chánh1",true,3,1));
-        studentList.add(new Student(2,"Thảo",false,9,1));
-        studentList.add(new Student(3,"chánh1",true,6,1));
-        studentList.add(new Student(4,"Ngân",false,8,1));
-        studentList.add(new Student(5,"chánh1",true,7,1));
-    }
+    private final String SELECT_ALL ="select * from student";
+    private final String DELETE_BY_ID ="delete from student where id =?";
+    private final String INSERT_INTO ="insert into student(name,gender,score,class_id) values (?,?,?,?)";
+
     // chuyển kết với DB
     @Override
     public List<Student> findAll() {
+        List<Student> studentlist = new ArrayList<>();
         // kết nối DB lấy dữ liêu lên
-
-        return studentList;
+       Connection connection = BaseRepository.getConnectDB();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String name  = resultSet.getString("name");
+                boolean gender = resultSet.getBoolean("gender");
+                float score = resultSet.getFloat("score");
+                int classId = resultSet.getInt("class_id");
+                Student student = new Student(id,name,gender,score,classId);
+                studentlist.add(student);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return studentlist;
     }
 
     @Override
     public List<Student> searchByName(String name) {
         List<Student> searchList = new ArrayList<>();
-        for (Student s : studentList) {
-            if (s.getName().contains(name)){
-                searchList.add(s);
-            }
-        }
         return searchList;
     }
 
     @Override
     public boolean add(Student student) {
         // kết nối DB để thêm dữ liệu vào
-
-
-        return studentList.add(student);
+        Connection connection = BaseRepository.getConnectDB();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO);
+            preparedStatement.setString(1,student.getName());
+            preparedStatement.setBoolean(2,student.isGender());
+            preparedStatement.setFloat(3,student.getScore());
+            preparedStatement.setInt(4,student.getClassId());
+             int effectRow = preparedStatement.executeUpdate();
+             return effectRow ==1;
+        } catch (SQLException e) {
+            System.out.println("lỗi kết nối database");
+            return false;
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override
     public boolean deleteById(int id) {
-        for (int i = 0; i <studentList.size() ; i++) {
-            if (studentList.get(i).getId()==id){
-                studentList.remove(i);
-                break;
+        Connection connection = BaseRepository.getConnectDB();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BY_ID);
+            preparedStatement.setInt(1,id);
+            int effectRow = preparedStatement.executeUpdate();
+            return effectRow ==1;
+        } catch (SQLException e) {
+            System.out.println("lỗi kết nối database");
+            return false;
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
         }
-        return true;
+
     }
 }

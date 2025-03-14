@@ -18,6 +18,13 @@ public class Student {
         this.classId = classId;
     }
 
+    public Student(String name, boolean gender, float score, int classId) {
+        this.name = name;
+        this.gender = gender;
+        this.score = score;
+        this.classId = classId;
+    }
+
     public int getId() {
         return id;
     }
