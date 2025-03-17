@@ -65,7 +65,7 @@
                     </c:otherwise>
                 </c:choose>
             </td>
-            <td>${student.getClassId()}</td>
+            <td>${student.getClassName()}</td>
             <td>
                 <button onclick="thongTinXoa(`${student.getId()}`,`${student.getName()}`)" type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Xoá
