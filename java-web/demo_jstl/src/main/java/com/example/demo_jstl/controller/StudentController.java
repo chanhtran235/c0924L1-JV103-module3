@@ -53,8 +53,11 @@ public class StudentController extends HttpServlet {
 
     private void searchByName(HttpServletRequest req, HttpServletResponse resp) {
         String searchName = req.getParameter("searchName");
-        List<Student> searchList = studentService.searchByName(searchName);
+        String classId = req.getParameter("classId");
+        List<StudentDto> searchList = studentService.search(searchName,classId);
+        List<ClassCG> classCGList = classCGService.findAll();
         req.setAttribute("studentList", searchList);
+        req.setAttribute("classList", classCGList);
         req.setAttribute("searchName", searchName);
         try {
             req.getRequestDispatcher("/views/student/list.jsp").forward(req,resp);
@@ -82,7 +85,9 @@ public class StudentController extends HttpServlet {
 
     private void showList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<StudentDto> studentList = studentService.findAll();
+        List<ClassCG> classCGList = classCGService.findAll();
         req.setAttribute("studentList", studentList);
+        req.setAttribute("classList", classCGList);
         req.getRequestDispatcher("/views/student/list.jsp").forward(req,resp);
     }
 

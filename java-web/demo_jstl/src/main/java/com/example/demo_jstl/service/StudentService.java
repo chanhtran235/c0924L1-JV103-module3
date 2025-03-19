@@ -19,9 +19,8 @@ public class StudentService implements IStudentService{
     }
 
     @Override
-    public List<Student> searchByName(String name) {
-
-        return studentRepository.searchByName(name);
+    public List<StudentDto> search(String seachName,String classId) {
+        return studentRepository.search(seachName,classId);
     }
 
     @Override

@@ -4,15 +4,15 @@ import com.example.demo_jstl.dto.StudentDto;
 import com.example.demo_jstl.model.Student;
 import com.example.demo_jstl.util.BaseRepository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public class StudentRepository implements IStudentRepository {
     private final String SELECT_ALL ="select s.*,c.name as class_name from student s join class c on s.class_id=c.id";
+    private final String SEARCH1 ="call seach(?,?);";
+    private final String SEARCH2 ="select s.*,c.name as class_name from student s join class c on s.class_id=c.id where s.name like ?";
     private final String DELETE_BY_ID ="delete from student where id =?";
     private final String INSERT_INTO ="insert into student(name,gender,score,class_id) values (?,?,?,?)";
 
@@ -47,8 +47,39 @@ public class StudentRepository implements IStudentRepository {
     }
 
     @Override
-    public List<Student> searchByName(String name) {
-        List<Student> searchList = new ArrayList<>();
+    public List<StudentDto> search(String searchName,String classId) {
+        List<StudentDto> searchList = new ArrayList<>();
+        Connection connection = BaseRepository.getConnectDB();
+        try {
+            CallableStatement callableStatement  = null;
+            if (classId.equals("")){
+                callableStatement = connection.prepareCall(SEARCH2);
+                callableStatement.setString(1,"%"+searchName+"%");
+            }else {
+                callableStatement = connection.prepareCall(SEARCH1);
+                callableStatement.setString(1,"%"+searchName+"%");
+                callableStatement.setString(2,classId);
+            }
+
+            ResultSet resultSet = callableStatement.executeQuery();
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String name  = resultSet.getString("name");
+                boolean gender = resultSet.getBoolean("gender");
+                float score = resultSet.getFloat("score");
+                String className = resultSet.getString("class_name");
+                StudentDto student = new StudentDto(id,name,gender,score,className);
+                searchList.add(student);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return searchList;
     }
 
